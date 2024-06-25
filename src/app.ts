@@ -8,7 +8,8 @@ app.use(express.json())
 app.use(cors())
 
 app.get('/', (req:Request, res:Response) => {
-  res.send('Hello World!')
+  var a = 10
+  res.send(a)
 })
 
 export default app;
