@@ -13,3 +13,4 @@ async function main() {
     console.log(error);
   }
 }
+main()
