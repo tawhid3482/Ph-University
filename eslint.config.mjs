@@ -17,6 +17,9 @@ export default [
       "no-console": "warn",
       "no-undef": "error",
     },
+    
+    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
+
   },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
