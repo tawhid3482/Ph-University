@@ -76,12 +76,12 @@ const studentSchema = new Schema<Student>({
     type: String,
     enum: {
       values: ['male', 'female'],
-      message:'gender must be required'
+      message:'{VALUE} is not valid gender '
     },
     required: true,
   },
   dateOfBirth: { type: String },
-  email: { type: String, required: true, unique:true},
+  email: { type: String, trim:true , required: true, unique:true},
   contactNo: { type: String, required: true },
   emergencyContactNo: { type: String, required: true },
   bloodGroup: {
