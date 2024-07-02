@@ -10,6 +10,15 @@ const userNameSchema = new Schema<UserName>({
   firstName: {
     type: String,
     required: true,
+
+    // custome validation use
+    validate: {
+      validator: function(value:string){
+        const firstNameStr = value.charAt(0).toUpperCase() + value.slice(1)
+       return firstNameStr === value
+      },
+      message: 'You Must be follow capitalize format like this( Tawhidul Islam)'
+    }
   },
   middleName: {
     type: String,
