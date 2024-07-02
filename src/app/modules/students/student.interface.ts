@@ -28,7 +28,7 @@ export type UserName = {
     email: string;
     contactNo: string;
     emergencyContactNo: string;
-    bloogGroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
+    bloodGroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
     presentAddress: string;
     permanentAddress: string;
     guardian: Guardian;
