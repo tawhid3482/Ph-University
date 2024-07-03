@@ -75,7 +75,7 @@ const localGuradianSchema = new Schema<LocalGuardian>({
 });
 
 const studentSchema = new Schema<Student>({
-  id: { type: String , required:true, unique:true},
+  id: { type: String ,unique: true, required:true },
   name: {
     type: userNameSchema,
     required: true,
@@ -89,7 +89,7 @@ const studentSchema = new Schema<Student>({
     required: true,
   },
   dateOfBirth: { type: String },
-  email: { type: String, trim:true , required: true, unique:true},
+  email: { type: String,  unique: true, trim: true , required: true},
   contactNo: { type: String, required: true },
   emergencyContactNo: { type: String, required: true },
   bloodGroup: {
