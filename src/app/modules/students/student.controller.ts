@@ -47,6 +47,7 @@ const getAllStudent = async (req: Request, res: Response) => {
     console.log(error);
   }
 };
+
 const getSingleStudent = async (req: Request, res: Response) => {
   try {
     const { studentId } = req.params;
