@@ -1,6 +1,11 @@
 import { Schema, model } from 'mongoose';
-import { TGuardian, TLocalGuardian, TStudent,  TStudentModel,  TUserName } from './student.interface';
-
+import {
+  TGuardian,
+  TLocalGuardian,
+  TStudent,
+  TStudentModel,
+  TUserName,
+} from './student.interface';
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -8,12 +13,13 @@ const userNameSchema = new Schema<TUserName>({
     required: true,
     // custome validation use
     validate: {
-      validator: function(value:string){
-        const firstNameStr = value.charAt(0).toUpperCase() + value.slice(1)
-       return firstNameStr === value
+      validator: function (value: string) {
+        const firstNameStr = value.charAt(0).toUpperCase() + value.slice(1);
+        return firstNameStr === value;
       },
-      message: 'You Must be follow capitalize format like this( Tawhidul Islam)'
-    }
+      message:
+        'You Must be follow capitalize format like this( Tawhidul Islam)',
+    },
   },
   middleName: {
     type: String,
@@ -70,8 +76,9 @@ const localGuradianSchema = new Schema<TLocalGuardian>({
   },
 });
 
-const studentSchema = new Schema<TStudent,TStudentModel>({
-  id: { type: String ,unique: true, required:true },
+const studentSchema = new Schema<TStudent, TStudentModel>({
+  id: { type: String, unique: true, required: true },
+  password: { type: String, unique: true, required: [true, 'password must be required'] , maxlength:[20, 'password not more than 20 character']},
   name: {
     type: userNameSchema,
     required: true,
@@ -80,12 +87,12 @@ const studentSchema = new Schema<TStudent,TStudentModel>({
     type: String,
     enum: {
       values: ['male', 'female'],
-      message:'{VALUE} is not valid gender '
+      message: '{VALUE} is not valid gender ',
     },
     required: true,
   },
   dateOfBirth: { type: String },
-  email: { type: String,  unique: true, trim: true , required: true},
+  email: { type: String, unique: true, trim: true, required: true },
   contactNo: { type: String, required: true },
   emergencyContactNo: { type: String, required: true },
   bloodGroup: {
@@ -95,12 +102,12 @@ const studentSchema = new Schema<TStudent,TStudentModel>({
   presentAddress: { type: String, required: true },
   permanentAddress: { type: String, required: true },
   guardian: {
-    type:guardianSchema,
-    required:true
+    type: guardianSchema,
+    required: true,
   },
   localGuardian: {
-    type:localGuradianSchema,
-    required:true
+    type: localGuradianSchema,
+    required: true,
   },
   profileImg: { type: String },
   isActive: {
@@ -110,14 +117,27 @@ const studentSchema = new Schema<TStudent,TStudentModel>({
   },
 });
 
+// pre save middleware/hook : will work on create() save()
+studentSchema.pre('save', function(){
+  // console.log(this, 'pre')
+})
+
+// post save middleware/hook
+studentSchema.post('save', function(){
+  // console.log(this, 'post')
+
+})
+
+
+
+
+
 // for creating custom static methods
- 
-studentSchema.statics.isUserExists = async function (id:string){
-  const existingUser = await StudentModel.findOne({id})
+
+studentSchema.statics.isUserExists = async function (id: string) {
+  const existingUser = await StudentModel.findOne({ id });
   return existingUser;
-}
-
-
+};
 
 // for creating instance
 // studentSchema.methods.isUserExists = async function (id:string) {
@@ -125,4 +145,7 @@ studentSchema.statics.isUserExists = async function (id:string){
 //   return existingUser;
 // }
 
-export const StudentModel = model<TStudent, TStudentModel>('Student', studentSchema);
+export const StudentModel = model<TStudent, TStudentModel>(
+  'Student',
+  studentSchema
+);
