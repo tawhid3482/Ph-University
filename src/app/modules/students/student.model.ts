@@ -10,7 +10,6 @@ const userNameSchema = new Schema<UserName>({
   firstName: {
     type: String,
     required: true,
-
     // custome validation use
     validate: {
       validator: function(value:string){
