@@ -41,7 +41,7 @@ export type TUserName = {
 
   
 export type TStudentMethod = {
-  isUserExits(id:string): Promise<TStudent>;
+  isUserExists(id:string): Promise<TStudent | null>;
 }
 
-export type StudentModel = Model <TStudent,{}, TStudentMethod>;
+export type TStudentModel = Model <TStudent,{}, TStudentMethod>;

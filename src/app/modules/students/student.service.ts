@@ -1,12 +1,15 @@
 import { get } from "mongoose";
-import { Student } from "./student.interface";
 import { StudentModel } from "./student.model";
+import { TStudent } from "./student.interface";
 
-const createStudentIntoDB = async (student: Student) => {
-    const result = await StudentModel.create(student); // build-id static method
+const createStudentIntoDB = async (student: TStudent) => {
+    // const result = await StudentModel.create(student); // build-id static method
 
-    // const studentData = new StudentModel(student)
-    // const result = await studentData.save() // build-in instance method provide by mongoose
+    const studentData = new StudentModel(student)
+    if(await studentData.isUserExists(student.id)){
+      throw new Error ('User already exists')
+    }
+    const result = await studentData.save() // build-in instance method provide by mongoose
     
      return result;
 

@@ -10,7 +10,6 @@ const createStudent = async (req: Request, res: Response) => {
     // const {error,value} = studentValidationSchema.validate(studentData)
 
     const zodParseData = studentValidationSchema.parse(studentData);
-
     const result = await StudentServices.createStudentIntoDB(zodParseData);
 
     // if(error){
@@ -26,10 +25,10 @@ const createStudent = async (req: Request, res: Response) => {
       message: 'Student is created succesfully',
       data: result,
     });
-  } catch (err) {
+  } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: 'Student is not created ',
+      message: err.message || 'Student is not created ',
       error: err,
     });
   }
