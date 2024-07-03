@@ -6,19 +6,20 @@ import studentValidationSchema from './student.validation';
 const createStudent = async (req: Request, res: Response) => {
   try {
     const { student: studentData } = req.body;
-    // data validate using joi
-    // const {error,value} = studentValidationSchema.validate(studentData)
-
     const zodParseData = studentValidationSchema.parse(studentData);
     const result = await StudentServices.createStudentIntoDB(zodParseData);
 
+   //{ //  if i use joi validation
+    // data validate using joi
+    
+    // const {error,value} = studentValidationSchema.validate(studentData)
     // if(error){
     //   res.status(500).json({
     //     success: false,
     //     message: 'Student is not created ',
     //     error: error.details,
     //   });
-    // }
+    // }}
 
     res.status(200).json({
       success: true,
