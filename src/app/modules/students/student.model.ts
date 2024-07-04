@@ -9,7 +9,6 @@ import {
 
 import bcrypt from 'bcrypt';
 import config from '../../config';
-import { boolean } from 'zod';
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {

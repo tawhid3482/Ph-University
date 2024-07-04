@@ -1,4 +1,3 @@
-import { get } from 'mongoose';
 import { StudentModel } from './student.model';
 import { TStudent } from './student.interface';
 
@@ -23,10 +22,10 @@ const getAllStudentFromDB = async () => {
 };
 
 const getSingleStudentFromDB = async (id: string) => {
-  // const result = await StudentModel.findOne({ id });
+  const result = await StudentModel.findOne({ id });
 
   // aggregating ar maddome findOne kore single data barkora
-    const result = await StudentModel.aggregate([{$match:{id:id}}])
+    // const result = await StudentModel.aggregate([{$match:{id:id}}])
 
   return result;
 };

@@ -42,16 +42,12 @@ export type TUserName = {
   };
 
   // for creating static
-
-  
 export interface TStudentModel extends Model<TStudent> {
   isUserExists(id:string): Promise<TStudent | null>;
 }
-
 
   // for creating instance
 // export type TStudentMethod = {
 //   isUserExists(id:string): Promise<TStudent | null>;
 // }
-
 // export type TStudentModel = Model <TStudent,{}, TStudentMethod>;
