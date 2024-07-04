@@ -7,9 +7,9 @@ import {
   TUserName,
 } from './student.interface';
 
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt';
 import config from '../../config';
-
+import { boolean } from 'zod';
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -82,7 +82,11 @@ const localGuradianSchema = new Schema<TLocalGuardian>({
 
 const studentSchema = new Schema<TStudent, TStudentModel>({
   id: { type: String, unique: true, required: true },
-  password: { type: String, unique: true, required: [true, 'password must be required'] , maxlength:[20, 'password not more than 20 character']},
+  password: {
+    type: String,
+    required: [true, 'password must be required'],
+    maxlength: [20, 'password not more than 20 character'],
+  },
   name: {
     type: userNameSchema,
     required: true,
@@ -119,25 +123,33 @@ const studentSchema = new Schema<TStudent, TStudentModel>({
     enum: ['active', 'blocked'],
     default: 'active',
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 // pre save middleware/hook : will work on create() save()
-studentSchema.pre('save', async function(){
- // hashing password and save into db
- const user = this
- user.password =await  bcrypt.hash(user.password,Number( config.bcrypt_salt_rounds))
-
-})
+studentSchema.pre('save', async function (next) {
+  // hashing password and save into db
+  const user = this; // ai this mane holo current j document post hote jaitase seta
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds)
+  );
+  next();
+});
 
 // post save middleware/hook
-studentSchema.post('save', function(){
-  // console.log(this, 'post')
+studentSchema.post('save', function (doc, next) {
+  doc.password = ''; // document save hobar por password empty string dakhabe krn password kau k dakhano jabe na.
+  next();
+});
 
-})
-
-
-
-
+// query middleware
+studentSchema.pre('find', function (next) {
+  next();
+});
 
 // for creating custom static methods
 

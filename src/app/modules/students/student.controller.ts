@@ -43,8 +43,12 @@ const getAllStudent = async (req: Request, res: Response) => {
       message: 'Student are retrieved succesfully',
       data: result,
     });
-  } catch (error) {
-    console.log(error);
+  } catch (err:any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || 'Student are not retrieved ',
+      error: err,
+    });
   }
 };
 
@@ -59,8 +63,12 @@ const getSingleStudent = async (req: Request, res: Response) => {
       message: 'Student is retrieved succesfully',
       data: result,
     });
-  } catch (err) {
-    console.log(err);
+  } catch (err:any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || 'Student are not retrieved ',
+      error: err,
+    });
   }
 };
 
