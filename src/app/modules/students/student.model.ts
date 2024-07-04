@@ -7,6 +7,10 @@ import {
   TUserName,
 } from './student.interface';
 
+import bcrypt from 'bcrypt'
+import config from '../../config';
+
+
 const userNameSchema = new Schema<TUserName>({
   firstName: {
     type: String,
@@ -118,8 +122,11 @@ const studentSchema = new Schema<TStudent, TStudentModel>({
 });
 
 // pre save middleware/hook : will work on create() save()
-studentSchema.pre('save', function(){
-  // console.log(this, 'pre')
+studentSchema.pre('save', async function(){
+ // hashing password and save into db
+ const user = this
+ user.password =await  bcrypt.hash(user.password,Number( config.bcrypt_salt_rounds))
+
 })
 
 // post save middleware/hook
