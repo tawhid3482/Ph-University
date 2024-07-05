@@ -50,5 +50,4 @@ const studentValidationSchema  = Joi.object({
   profileImg: Joi.string().optional(),
   isActive: Joi.string().valid('active', 'blocked').default('active'),
 });
-
 export default studentValidationSchema 
