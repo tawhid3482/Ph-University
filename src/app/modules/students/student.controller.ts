@@ -3,37 +3,37 @@ import { StudentServices } from './student.service';
 import studentValidationSchema from './student.validation';
 // import studentValidationSchema from "./student.validation-joi";
 
-const createStudent = async (req: Request, res: Response) => {
-  try {
-    const { student: studentData } = req.body;
-    const zodParseData = studentValidationSchema.parse(studentData);
-    const result = await StudentServices.createStudentIntoDB(zodParseData);
+// const createStudent = async (req: Request, res: Response) => {
+//   try {
+//     const { student: studentData } = req.body;
+//     const zodParseData = studentValidationSchema.parse(studentData);
+//     const result = await StudentServices.createStudentIntoDB(zodParseData);
 
-    //{ //  if i use joi validation
-    // data validate using joi
+//     //{ //  if i use joi validation
+//     // data validate using joi
 
-    // const {error,value} = studentValidationSchema.validate(studentData)
-    // if(error){
-    //   res.status(500).json({
-    //     success: false,
-    //     message: 'Student is not created ',
-    //     error: error.details,
-    //   });
-    // }}
+//     // const {error,value} = studentValidationSchema.validate(studentData)
+//     // if(error){
+//     //   res.status(500).json({
+//     //     success: false,
+//     //     message: 'Student is not created ',
+//     //     error: error.details,
+//     //   });
+//     // }}
 
-    res.status(200).json({
-      success: true,
-      message: 'Student is created succesfully',
-      data: result,
-    });
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: err.message || 'Student is not created ',
-      error: err,
-    });
-  }
-};
+//     res.status(200).json({
+//       success: true,
+//       message: 'Student is created succesfully',
+//       data: result,
+//     });
+//   } catch (err: any) {
+//     res.status(500).json({
+//       success: false,
+//       message: err.message || 'Student is not created ',
+//       error: err,
+//     });
+//   }
+// };
 
 const getAllStudent = async (req: Request, res: Response) => {
   try {
@@ -91,7 +91,6 @@ const deleteStudent = async (req: Request, res: Response) => {
 };
 
 export const studentControllers = {
-  createStudent,
   getAllStudent,
   getSingleStudent,
   deleteStudent,
