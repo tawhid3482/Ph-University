@@ -79,83 +79,62 @@ const localGuradianSchema = new Schema<TLocalGuardian>({
   },
 });
 
-const studentSchema = new Schema<TStudent, TStudentModel>({
-  id: { type: String, unique: true, required: true },
-  user: {type: Schema.Types.ObjectId, required: [true, 'user id must be required'], unique:true, ref:'User'},
-  password: {
-    type: String,
-    required: [true, 'password must be required'],
-    maxlength: [20, 'password not more than 20 character'],
-  },
-  name: {
-    type: userNameSchema,
-    required: true,
-  },
-  gender: {
-    type: String,
-    enum: {
-      values: ['male', 'female'],
-      message: '{VALUE} is not valid gender ',
+const studentSchema = new Schema<TStudent, TStudentModel>(
+  {
+    id: { type: String, unique: true, required: true },
+    user: {
+      type: Schema.Types.ObjectId,
+      required: [true, 'user id must be required'],
+      unique: true,
+      ref: 'user',
     },
-    required: true,
+    name: {
+      type: userNameSchema,
+      required: true,
+    },
+    gender: {
+      type: String,
+      enum: {
+        values: ['male', 'female'],
+        message: '{VALUE} is not valid gender ',
+      },
+      required: true,
+    },
+    dateOfBirth: { type: String },
+    email: { type: String, unique: true, trim: true, required: true },
+    contactNo: { type: String, required: true },
+    emergencyContactNo: { type: String, required: true },
+    bloodGroup: {
+      type: String,
+      enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+    },
+    presentAddress: { type: String, required: true },
+    permanentAddress: { type: String, required: true },
+    guardian: {
+      type: guardianSchema,
+      required: true,
+    },
+    localGuardian: {
+      type: localGuradianSchema,
+      required: true,
+    },
+    profileImg: { type: String },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
-  dateOfBirth: { type: String },
-  email: { type: String, unique: true, trim: true, required: true },
-  contactNo: { type: String, required: true },
-  emergencyContactNo: { type: String, required: true },
-  bloodGroup: {
-    type: String,
-    enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
-  },
-  presentAddress: { type: String, required: true },
-  permanentAddress: { type: String, required: true },
-  guardian: {
-    type: guardianSchema,
-    required: true,
-  },
-  localGuardian: {
-    type: localGuradianSchema,
-    required: true,
-  },
-  profileImg: { type: String },
-  isActive: {
-    type: String,
-    enum: ['active', 'blocked'],
-    default: 'active',
-  },
-  isDeleted: {
-    type: Boolean,
-    default: false,
-  },
-}, {
-  toJSON: {
-    virtuals: true,
+  {
+    toJSON: {
+      virtuals: true,
+    },
   }
-});
+);
 
-// virtual  jkn kno kisu jog korar proyjon hobe tkn virtual use kora jay 
+// virtual  jkn kno kisu jog korar proyjon hobe tkn virtual use kora jay
 // akane firstName+middleName+lastName k jog kore fullName a kora hyse.
-studentSchema.virtual('fullName').get(function(){
-  return (`${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`)
-  
-})
-
-
-// pre save middleware/hook : will work on create() save()
-studentSchema.pre('save', async function (next) {
-  // hashing password and save into db
-  const user = this; // ai this mane holo current j document post hote jaitase seta
-  user.password = await bcrypt.hash(
-    user.password,
-    Number(config.bcrypt_salt_rounds)
-  );
-  next();
-});
-
-// post save middleware/hook
-studentSchema.post('save', function (doc, next) {
-  doc.password = ''; // document save hobar por password empty string dakhabe krn password kau k dakhano jabe na.
-  next();
+studentSchema.virtual('fullName').get(function () {
+  return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
 });
 
 // query middleware

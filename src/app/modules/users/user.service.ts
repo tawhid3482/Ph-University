@@ -1,5 +1,6 @@
 import config from '../../config';
 import { TStudent } from '../students/student.interface';
+import { StudentModel } from '../students/student.model';
 import { TUser } from './user.interface';
 import { userModel } from './user.model';
 
@@ -15,15 +16,18 @@ const createStudentIntoDB = async (password: string, studentData: TStudent) => {
   // now we have no auto genetated id so we use manually generated password
   userData.id = '203010001';
 
-  const result = await userModel.create(userData);
+  // create a new user
+  const newUser = await userModel.create(userData);
 
-  if (Object.keys(result).length) {
+  if (Object.keys(newUser).length) {
     // set id, _id as user
-    studentData.id = result.id;
-    studentData.user = result._id;
-  }
+    studentData.id = newUser.id; // embading id
+    studentData.user = newUser._id; // reference _id
 
-  return result;
+    const newStudent = await StudentModel.create(studentData);
+
+    return newStudent;
+  }
 };
 
 export const UserServices = {

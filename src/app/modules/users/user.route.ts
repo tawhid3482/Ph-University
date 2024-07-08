@@ -1,7 +1,8 @@
 import express, { Router } from 'express'
+import { UserControllers } from './user.controller'
 const router = express.Router()
 
-router.post('/create-student', )
+router.post('/create-student', UserControllers.createStudent)
 router.post('/create-faculty', )
 router.post('/create-admin', )
 
