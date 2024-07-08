@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import { StudentRoutes } from './app/modules/students/student.route';
 import { UserRoutes } from './app/modules/users/user.route';
+import globarErrorHandler from './app/middleware/globalErrorHandler';
 const app: Application = express();
 
 // parsers
@@ -21,5 +22,7 @@ const getAController = (req: Request, res: Response) => {
 };
 
 app.get('/', getAController);
+
+app.use(globarErrorHandler)
 
 export default app;

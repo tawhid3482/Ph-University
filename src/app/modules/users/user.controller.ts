@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { UserServices } from "./user.service";
 
-const createStudent = async (req: Request, res: Response,next:NextFunction) => {
+const createStudent = async (req: Request, res: Response, next:NextFunction) => {
     try {
       const {password, student: studentData } = req.body;
       // const zodParseData = studentValidationSchema.parse(studentData);
@@ -13,7 +13,7 @@ const createStudent = async (req: Request, res: Response,next:NextFunction) => {
         data: result,
       });
     } catch (err) {
-      next(next)
+      next(err)
     }
   };
 
