@@ -1,4 +1,3 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { StudentServices } from './student.service';
 import sendResponse from '../../utils/sendResponse';
 import httpStatus from 'http-status';
@@ -34,7 +33,7 @@ import catchAsync from '../../utils/catchAsync';
 
 
 
-const getAllStudent = catchAsync(async (req, res, next) => {
+const getAllStudent = catchAsync(async (req, res) => {
   const result = await StudentServices.getAllStudentFromDB();
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -44,7 +43,7 @@ const getAllStudent = catchAsync(async (req, res, next) => {
   });
 });
 
-const getSingleStudent = catchAsync(async (req, res, next) => {
+const getSingleStudent = catchAsync(async (req, res) => {
   const { studentId } = req.params;
 
   const result = await StudentServices.getSingleStudentFromDB(studentId);
@@ -57,7 +56,7 @@ const getSingleStudent = catchAsync(async (req, res, next) => {
   });
 });
 
-const deleteStudent = catchAsync(async (req, res, next) => {
+const deleteStudent = catchAsync(async (req, res) => {
   const { studentId } = req.params;
   const result = await StudentServices.deleteStudentfromDB(studentId);
   sendResponse(res, {
