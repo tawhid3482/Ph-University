@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from 'express';
+import { RequestHandler, } from 'express';
 import { StudentServices } from './student.service';
 import sendResponse from '../../utils/sendResponse';
 import httpStatus from 'http-status';
 
-// const createStudent = async (req: Request, res: Response, next:NextFunction) => {
+// const createStudent:RequestHandler = async (req, res, next) => {
 //   try {
 //     const { student: studentData } = req.body;
 //     const zodParseData = studentValidationSchema.parse(studentData);
@@ -31,11 +31,7 @@ import httpStatus from 'http-status';
 //   }
 // };
 
-const getAllStudent = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const getAllStudent: RequestHandler = async (req, res, next) => {
   try {
     const result = await StudentServices.getAllStudentFromDB();
     sendResponse(res, {
@@ -49,11 +45,7 @@ const getAllStudent = async (
   }
 };
 
-const getSingleStudent = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const getSingleStudent: RequestHandler = async (req, res, next) => {
   try {
     const { studentId } = req.params;
 
@@ -70,11 +62,7 @@ const getSingleStudent = async (
   }
 };
 
-const deleteStudent = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const deleteStudent: RequestHandler = async (req, res, next) => {
   try {
     const { studentId } = req.params;
     const result = await StudentServices.deleteStudentfromDB(studentId);
