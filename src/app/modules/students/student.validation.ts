@@ -34,7 +34,7 @@ const localGuardianValidationSchema = z.object({
 });
 
 // Define the Zod schema for Student
-const studentValidationSchema = z.object({
+const createStudentValidationSchema = z.object({
   body: z.object({
     student: z.object({
       name: userNameValidationSchema,
@@ -60,5 +60,5 @@ const studentValidationSchema = z.object({
 });
 
 export const validationSchema = {
-  studentValidationSchema,
+   createStudentValidationSchema,
 };
