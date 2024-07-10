@@ -34,8 +34,8 @@ const academicSemesterSchema = new Schema<TAcademicSemester>(
       required: true,
     },
     year: { type: Date, required: true },
-    startMonth: { type: String, enum: MonthSchema },
-    endMonth: { type: String, enum: MonthSchema },
+    startMonth: { type: String, enum: MonthSchema, required: true },
+    endMonth: { type: String, enum: MonthSchema, required: true },
   },
   {
     timestamps: true,
