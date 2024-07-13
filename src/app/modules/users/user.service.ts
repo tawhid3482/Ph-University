@@ -17,11 +17,11 @@ const createStudentIntoDB = async (password: string, studentData: TStudent) => {
   const generatedStudentId = (payload: TAcademicSemester)=>{
 
   }
-
-
+  
+  userData.id = generatedStudentId();
 
   // now we have no auto genetated id so we use manually generated password
-  userData.id = generatedStudentId();
+  // userData.id = '2025010001';
 
   // create a new user
   const newUser = await userModel.create(userData);
