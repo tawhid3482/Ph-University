@@ -12,6 +12,7 @@ const findLastStudentId = async () => {
         _id: 0,
       }
     )
+    .sort({ createdAt: -1 })
     .lean();
   return lastStudent?.id ? lastStudent.id.substring(6) : undefined;
 };
