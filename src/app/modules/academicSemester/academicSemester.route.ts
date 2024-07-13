@@ -7,7 +7,7 @@ const router = express.Router()
 
 router.post('/create-academic-semester', validationRequest(academicSemesterValidation.createAcademicSemesterValidationSchema), AcademicSemesterControllers.createAcademicSemester)
 router.get('/', AcademicSemesterControllers.getAllAcademicSemester)
-router.get('/id', AcademicSemesterControllers.createAcademicSemester)
-router.patch('/id', AcademicSemesterControllers.createAcademicSemester)
+router.get('/:_id', AcademicSemesterControllers.getSingleAcademicSemester)
+router.patch('/:_id',validationRequest(academicSemesterValidation.updateAcademicSemesterValidationSchema), AcademicSemesterControllers.updateAcademicSemester)
 
 export const AcademicSemesterRoutes = router
