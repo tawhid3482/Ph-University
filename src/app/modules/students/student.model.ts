@@ -120,7 +120,6 @@ const studentSchema = new Schema<TStudent, TStudentModel>(
     admissionSemester:{
       type:Schema.Types.ObjectId,
       required:true,
-      unique:true,
       ref:'AcademicSemester'
 
     },
