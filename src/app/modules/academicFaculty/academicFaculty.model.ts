@@ -3,7 +3,7 @@ import { TAcademicFaculty } from './academicFaculty.interface';
 
 const academicFacultySchema = new Schema<TAcademicFaculty>(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique:true },
   },
   {
     timestamps: true,
@@ -11,6 +11,6 @@ const academicFacultySchema = new Schema<TAcademicFaculty>(
 );
 
 export const academicFacultyModel = model<TAcademicFaculty>(
-  'academicFaculty',
+  'AcademicFaculty',
   academicFacultySchema
 );
