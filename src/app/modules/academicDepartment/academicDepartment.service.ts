@@ -13,11 +13,12 @@ const getSingleAcademicDepartmentFromDB = async (id: string) => {
   const result = await academicDepartmentModel.findById({ _id: id });
   return result;
 };
+
 const updateAcademicDepartmentIntoDB = async (
   id: string,
   payload: Partial<TAcademicDepartment>
 ) => {
-  const result = await academicDepartmentModel.findById({ _id: id }, payload, {
+  const result = await academicDepartmentModel.findOneAndUpdate({ _id: id }, payload, {
     new: true,
   });
   return result;
