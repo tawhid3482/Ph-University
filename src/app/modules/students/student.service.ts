@@ -2,7 +2,7 @@ import { StudentModel } from './student.model';
 import { TStudent } from './student.interface';
 
 // const createStudentIntoDB = async (student: TStudent) => {
-  
+
 //   if (await StudentModel.isUserExists(student.id)) {
 //     throw new Error('User already exists');
 //   }
@@ -17,26 +17,36 @@ import { TStudent } from './student.interface';
 // };
 
 const getAllStudentFromDB = async () => {
-  const result = await StudentModel.find();
+  // ref data ke show koranor jnno populate use kora hy
+  const result = await StudentModel.find()
+    .populate('admissionSemester')
+    .populate({
+      path: 'academicDepartment',
+      populate: {
+        path: 'academicFaculty',
+      },
+    });
   return result;
 };
 
 const getSingleStudentFromDB = async (id: string) => {
-  const result = await StudentModel.findOne({ id });
+  const result = await StudentModel.findOne({ id })
+    .populate('admissionSemester')
+    .populate('academicDepartment');
 
   // aggregating ar maddome findOne kore single data barkora
-    // const result = await StudentModel.aggregate([{$match:{id:id}}])
+  // const result = await StudentModel.aggregate([{$match:{id:id}}])
 
   return result;
 };
 
 const deleteStudentfromDB = async (id: string) => {
-  const result = await StudentModel.updateOne({ id },{isDeleted: true});
+  const result = await StudentModel.updateOne({ id }, { isDeleted: true });
   return result;
 };
 
 export const StudentServices = {
   getAllStudentFromDB,
   getSingleStudentFromDB,
-  deleteStudentfromDB
+  deleteStudentfromDB,
 };
