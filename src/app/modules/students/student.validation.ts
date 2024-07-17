@@ -61,63 +61,48 @@ const createStudentValidationSchema = z.object({
     }),
   }),
 });
+
 const updateUserNameValidationSchema = z.object({
-  firstName: z.string().refine(
-    (value) => {
-      const firstNameStr = value.charAt(0).toUpperCase() + value.slice(1);
-      return firstNameStr === value;
-    },
-    {
-      message: 'You must follow capitalize format like this (Tawhidul Islam)',
-    }
-  ).optional(),
+  firstName: z.string().min(1).max(20).optional(),
   middleName: z.string().optional(),
-  lastName: z.string().nonempty('Last name is required').optional(),
+  lastName: z.string().optional(),
 });
 
-// Define the Zod schema for Guardian
 const updateGuardianValidationSchema = z.object({
-  fatherName: z.string().nonempty('Father name is required').optional(),
-  fatherOccupation: z.string().nonempty('Father occupation is required').optional(),
-  fatherContactNo: z.string().nonempty('Father contact number is required').optional(),
-  motherName: z.string().nonempty('Mother name is required').optional(),
-  motherOccupation: z.string().nonempty('Mother occupation is required').optional(),
-  motherContactNo: z.string().nonempty('Mother contact number is required').optional(),
+  fatherName: z.string().optional(),
+  fatherOccupation: z.string().optional(),
+  fatherContactNo: z.string().optional(),
+  motherName: z.string().optional(),
+  motherOccupation: z.string().optional(),
+  motherContactNo: z.string().optional(),
 });
 
-// Define the Zod schema for LocalGuardian
 const updateLocalGuardianValidationSchema = z.object({
-  name: z.string().nonempty('Local guardian name is required').optional(),
-  occupation: z.string().nonempty('Local guardian occupation is required').optional(),
-  contactNo: z.string().nonempty('Local guardian contact number is required').optional(),
-  address: z.string().nonempty('Local guardian address is required').optional(),
+  name: z.string().optional(),
+  occupation: z.string().optional(),
+  contactNo: z.string().optional(),
+  address: z.string().optional(),
 });
 
-// Define the Zod schema for Student
-const updateStudentValidationSchema = z.object({
+export const updateStudentValidationSchema = z.object({
   body: z.object({
     student: z.object({
       name: updateUserNameValidationSchema,
-      gender: z.enum(['male', 'female'], {
-        errorMap: () => ({ message: '{VALUE} is not a valid gender' }),
-      }).optional(),
+      gender: z.enum(['male', 'female', 'other']).optional(),
       dateOfBirth: z.string().optional(),
-      email: z.string().email('Invalid email format').optional(),
-      contactNo: z.string().nonempty('Contact number is required').optional(),
-      emergencyContactNo: z
-        .string()
-        .nonempty('Emergency contact number is required').optional(),
-      bloodGroup: z
+      email: z.string().email().optional(),
+      contactNo: z.string().optional(),
+      emergencyContactNo: z.string().optional(),
+      bloogGroup: z
         .enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])
         .optional(),
-      presentAddress: z.string().nonempty('Present address is required').optional(),
-      permanentAddress: z.string().nonempty('Permanent address is required').optional(),
-      guardian: updateGuardianValidationSchema,
-      localGuardian: updateLocalGuardianValidationSchema,
-      profileImg: z.string().optional(),
+      presentAddress: z.string().optional(),
+      permanentAddress: z.string().optional(),
+      guardian: updateGuardianValidationSchema.optional(),
+      localGuardian: updateLocalGuardianValidationSchema.optional(),
       admissionSemester: z.string().optional(),
-      academicDepartment: z.string().optional()
-      
+      profileImg: z.string().optional(),
+      academicDepartment: z.string().optional(),
     }),
   }),
 });
