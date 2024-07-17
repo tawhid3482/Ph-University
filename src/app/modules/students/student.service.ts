@@ -31,8 +31,13 @@ const getAllStudentFromDB = async () => {
 
 const getSingleStudentFromDB = async (id: string) => {
   const result = await StudentModel.findOne({ id })
-    .populate('admissionSemester')
-    .populate('academicDepartment');
+  .populate('admissionSemester')
+  .populate({
+    path: 'academicDepartment',
+    populate: {
+      path: 'academicFaculty',
+    },
+  });
 
   // aggregating ar maddome findOne kore single data barkora
   // const result = await StudentModel.aggregate([{$match:{id:id}}])
