@@ -48,8 +48,9 @@ const getSingleStudentFromDB = async (id: string) => {
   return result;
 };
 
-const updateStudentFromDB = async (id: string) => {
-  const result = await StudentModel.findOneAndUpdate({ id })
+const updateStudentFromDB = async (id: string, payload:Partial<TStudent>) => {
+  
+  const result = await StudentModel.findOneAndUpdate({ id },payload)
   return result;
 };
 

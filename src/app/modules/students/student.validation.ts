@@ -100,29 +100,29 @@ const updateStudentValidationSchema = z.object({
       name: updateUserNameValidationSchema,
       gender: z.enum(['male', 'female'], {
         errorMap: () => ({ message: '{VALUE} is not a valid gender' }),
-      }),
+      }).optional(),
       dateOfBirth: z.string().optional(),
-      email: z.string().email('Invalid email format'),
-      contactNo: z.string().nonempty('Contact number is required'),
+      email: z.string().email('Invalid email format').optional(),
+      contactNo: z.string().nonempty('Contact number is required').optional(),
       emergencyContactNo: z
         .string()
-        .nonempty('Emergency contact number is required'),
+        .nonempty('Emergency contact number is required').optional(),
       bloodGroup: z
         .enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])
         .optional(),
-      presentAddress: z.string().nonempty('Present address is required'),
-      permanentAddress: z.string().nonempty('Permanent address is required'),
+      presentAddress: z.string().nonempty('Present address is required').optional(),
+      permanentAddress: z.string().nonempty('Permanent address is required').optional(),
       guardian: updateGuardianValidationSchema,
       localGuardian: updateLocalGuardianValidationSchema,
       profileImg: z.string().optional(),
-      admissionSemester: z.string(),
-      academicDepartment: z.string()
+      admissionSemester: z.string().optional(),
+      academicDepartment: z.string().optional()
       
     }),
   }),
 });
 
-export const validationSchema = {
+export const StudentValidationSchema = {
    createStudentValidationSchema,
    updateStudentValidationSchema
 };

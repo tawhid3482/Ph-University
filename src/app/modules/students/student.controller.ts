@@ -66,7 +66,8 @@ const deleteStudent = catchAsync(async (req, res) => {
 });
 const updateStudent = catchAsync(async (req, res) => {
   const { studentId } = req.params;
-  const result = await StudentServices.updateStudentFromDB(studentId);
+  const { student } = req.body;
+  const result = await StudentServices.updateStudentFromDB(studentId,student);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
