@@ -1,5 +1,9 @@
 import { StudentModel } from './student.model';
 import { TStudent } from './student.interface';
+import mongoose from 'mongoose';
+import AppError from '../../errors/AppError';
+import httpStatus from 'http-status';
+import { userModel } from '../users/user.model';
 
 // const createStudentIntoDB = async (student: TStudent) => {
 
@@ -31,13 +35,13 @@ const getAllStudentFromDB = async () => {
 
 const getSingleStudentFromDB = async (id: string) => {
   const result = await StudentModel.findOne({ id })
-  .populate('admissionSemester')
-  .populate({
-    path: 'academicDepartment',
-    populate: {
-      path: 'academicFaculty',
-    },
-  });
+    .populate('admissionSemester')
+    .populate({
+      path: 'academicDepartment',
+      populate: {
+        path: 'academicFaculty',
+      },
+    });
 
   // aggregating ar maddome findOne kore single data barkora
   // const result = await StudentModel.aggregate([{$match:{id:id}}])
@@ -46,8 +50,33 @@ const getSingleStudentFromDB = async (id: string) => {
 };
 
 const deleteStudentfromDB = async (id: string) => {
-  const result = await StudentModel.updateOne({ id }, { isDeleted: true });
-  return result;
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+    const deletedStudent = await StudentModel.findOneAndUpdate(
+      { id },
+      { isDeleted: true },
+      { new: true, session }
+    );
+    if (!deletedStudent) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete student');
+    }
+
+    const deletedUser = await userModel.findOneAndUpdate(
+      { id },
+      { isDeleted: true },
+      { new: true, session }
+    );
+    if (!deletedUser) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete user');
+    }
+    await session.commitTransaction();
+    await session.endSession();
+    return deletedStudent;
+  } catch (err) {
+    await session.abortTransaction();
+    await session.endSession();
+  }
 };
 
 export const StudentServices = {
