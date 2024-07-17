@@ -45,7 +45,11 @@ const getSingleStudentFromDB = async (id: string) => {
 
   // aggregating ar maddome findOne kore single data barkora
   // const result = await StudentModel.aggregate([{$match:{id:id}}])
+  return result;
+};
 
+const updateStudentFromDB = async (id: string) => {
+  const result = await StudentModel.findOneAndUpdate({ id })
   return result;
 };
 
@@ -83,4 +87,5 @@ export const StudentServices = {
   getAllStudentFromDB,
   getSingleStudentFromDB,
   deleteStudentfromDB,
+  updateStudentFromDB
 };
