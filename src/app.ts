@@ -2,7 +2,7 @@ import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import { StudentRoutes } from './app/modules/students/student.route';
 import { UserRoutes } from './app/modules/users/user.route';
-import globarErrorHandler from './app/middleware/globalErrorHandler';
+import globalErrorHandler from './app/middleware/globalErrorHandler';
 import notFound from './app/middleware/notFound';
 import router from './app/routes';
 const app: Application = express();
@@ -25,7 +25,7 @@ const test = (req: Request, res: Response) => {
 app.get('/', test);
 
 // middleware
-app.use(globarErrorHandler)
+app.use(globalErrorHandler)
 app.use(notFound)
 
 export default app;
