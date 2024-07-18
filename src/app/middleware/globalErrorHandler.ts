@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { ZodError } from 'zod';
+import { ZodError, ZodIssue } from 'zod';
 
 const globalErrorHandler = (
   err: any,
@@ -10,10 +10,8 @@ const globalErrorHandler = (
   // set default value
   let statusCode = err.statusCode || 500;
   let message = err.message || 'Something went wrong';
-  type TErrorSource = {
-    path: string | number;
-    message: string;
-  }[];
+
+
   const errorSources: TErrorSource = [
     {
       path: '',
@@ -21,15 +19,30 @@ const globalErrorHandler = (
     },
   ];
 
+  const handleZodError = (err: ZodError) => {
+    const errorSources :TErrorSource = err.issues.map((issue: ZodIssue) => {
+      return {
+        path: issue?.path[issue.path.length - 1],
+        message: issue.message,
+      };
+    });
+
+    const statusCode = 400;
+    return {
+      statusCode,
+      message: 'Zod validation Error',
+      errorSources,
+    };
+  };
+
   if (err instanceof ZodError) {
-    (statusCode = 400), (message = ' ami zod bolsi');
+    const simplifiedError = handleZodError(err);
   }
 
   return res.status(statusCode).json({
     success: false,
     message,
     errorSources,
-    error: err,
   });
 };
 export default globalErrorHandler;
