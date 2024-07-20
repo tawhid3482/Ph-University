@@ -20,9 +20,28 @@ import { userModel } from '../users/user.model';
 //   return result;
 // };
 
-const getAllStudentFromDB = async () => {
+const getAllStudentFromDB = async (query: Record<string, unknown>) => {
+  const queryObj = { ...query };
+
+  const studentSearchableField = ['email', 'name.firstName', 'presentAddress'];
+  let searchTerm = '';
+  if (query?.searchTerm) {
+    searchTerm = query?.searchTerm as string;
+  }
+
+  const searchQuery = StudentModel.find({
+    $or: studentSearchableField.map((field) => ({
+      [field]: { $regex: searchTerm, $options: 'i' },
+    })),
+  });
+
+  // filtering
+  const excludeFields = ['searchTerm', 'sort', 'limit'];
+  excludeFields.forEach((el) => delete queryObj[el]);
+
   // ref data ke show koranor jnno populate use kora hy
-  const result = await StudentModel.find()
+  const filterQuery = searchQuery
+    .find(queryObj)
     .populate('admissionSemester')
     .populate({
       path: 'academicDepartment',
@@ -30,7 +49,22 @@ const getAllStudentFromDB = async () => {
         path: 'academicFaculty',
       },
     });
-  return result;
+
+  let sort = '-createdAt';
+  if (query.sort) {
+    sort = query.sort as string;
+  }
+
+  const sortQuery = filterQuery.sort(sort);
+
+  let limit = 1;
+  if (query.limit) {
+    limit = query.limit;
+  }
+
+  const limitQuery = await sortQuery.limit(limit);
+
+  return limitQuery;
 };
 
 const getSingleStudentFromDB = async (id: string) => {
