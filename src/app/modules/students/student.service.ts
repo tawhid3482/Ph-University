@@ -56,14 +56,12 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
   }
 
   const sortQuery = filterQuery.sort(sort);
-
   let limit = 1;
   if (query.limit) {
-    limit = query.limit;
+    limit = query.limit as number;
   }
 
   const limitQuery = await sortQuery.limit(limit);
-
   return limitQuery;
 };
 
@@ -120,7 +118,7 @@ const updateStudentIntoDB = async (id: string, payload: Partial<TStudent>) => {
   return result;
 };
 
-const deleteStudentfromDB = async (id: string) => {
+const deleteStudentFromDB = async (id: string) => {
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
@@ -154,6 +152,6 @@ const deleteStudentfromDB = async (id: string) => {
 export const StudentServices = {
   getAllStudentFromDB,
   getSingleStudentFromDB,
-  deleteStudentfromDB,
+  deleteStudentFromDB,
   updateStudentIntoDB,
 };

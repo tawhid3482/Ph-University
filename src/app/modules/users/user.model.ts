@@ -29,7 +29,6 @@ const userSchema = new Schema<TUser>(
     timestamps: true,
   }
 );
-
 // pre save middleware/hook : will work on create() save()
 userSchema.pre('save', async function (next) {
   // hashing password and save into db
