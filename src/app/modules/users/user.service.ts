@@ -40,7 +40,7 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
     }
 
     // set id, _id as user
-    payload.id = newUser[0].id; // embading id
+    payload.id = newUser[0].id; // embedding id
     payload.user = newUser[0]._id; // reference _id
 
     //create a student {transaction-2}

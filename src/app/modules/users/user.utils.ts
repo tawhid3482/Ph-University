@@ -19,7 +19,7 @@ const findLastStudentId = async () => {
 
 export const generatedStudentId = async (payload: TAcademicSemester) => {
   // first time 0000
-  let currentId = (0).toString(); // 0000 by deafult
+  let currentId = (0).toString(); // 0000 by default
 
   const lastStudentId = await findLastStudentId();
   const lastStudentSemesterCode = lastStudentId?.substring(4, 6); // code
