@@ -11,7 +11,7 @@ const userNameSchema = new Schema<TUserName>({
   firstName: {
     type: String,
     required: true,
-    // custome validation use
+    // custom validation use
     validate: {
       validator: function (value: string) {
         const firstNameStr = value.charAt(0).toUpperCase() + value.slice(1);
@@ -57,7 +57,7 @@ const guardianSchema = new Schema<TGuardian>({
   },
 });
 
-const localGuradianSchema = new Schema<TLocalGuardian>({
+const localGuardianSchema = new Schema<TLocalGuardian>({
   name: {
     type: String,
     required: true,
@@ -112,7 +112,7 @@ const studentSchema = new Schema<TStudent, TStudentModel>(
       required: true,
     },
     localGuardian: {
-      type: localGuradianSchema,
+      type: localGuardianSchema,
       required: true,
     },
     profileImg: { type: String },
@@ -159,7 +159,6 @@ studentSchema.pre('aggregate', function (next) {
 });
 
 // for creating custom static methods
-
 studentSchema.statics.isUserExists = async function (id: string) {
   const existingUser = await StudentModel.findOne({ id });
   return existingUser;

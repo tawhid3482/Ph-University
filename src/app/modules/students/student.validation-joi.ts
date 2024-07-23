@@ -13,7 +13,7 @@ const userNameValidationSchema = Joi.object({
 });
 
 // Define the Joi schema for Guardian
-const guardianValidatiionSchema = Joi.object({
+const guardianValidationSchema = Joi.object({
   fatherName: Joi.string().required(),
   fatherOccupation: Joi.string().required(),
   fatherContactNo: Joi.string().required(),
@@ -45,7 +45,7 @@ const studentValidationSchema  = Joi.object({
   bloodGroup: Joi.string().valid('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-').optional(),
   presentAddress: Joi.string().required(),
   permanentAddress: Joi.string().required(),
-  guardian: guardianValidatiionSchema.required(),
+  guardian: guardianValidationSchema.required(),
   localGuardian: localGuardianValidationSchema.required(),
   profileImg: Joi.string().optional(),
   isActive: Joi.string().valid('active', 'blocked').default('active'),

@@ -74,7 +74,6 @@ const getSingleStudentFromDB = async (id: string) => {
         path: 'academicFaculty',
       },
     });
-
   // aggregating ar maddome findOne kore single data barkora
   // const result = await StudentModel.aggregate([{$match:{id:id}}])
   return result;
@@ -104,9 +103,7 @@ const updateStudentIntoDB = async (id: string, payload: Partial<TStudent>) => {
       modifiedUpdatedData[`localGuardian.${key}`] = value;
     }
   }
-
   // console.log(modifiedUpdatedData);
-
   const result = await StudentModel.findOneAndUpdate(
     { id },
     modifiedUpdatedData,
