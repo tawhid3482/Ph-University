@@ -23,7 +23,7 @@ import catchAsync from '../../utils/catchAsync';
 
 //     res.status(200).json({
 //       success: true,
-//       message: 'Student is created succesfully',
+//       message: 'Student is created successfully',
 //       data: result,
 //     });
 //   } catch (err) {
@@ -36,7 +36,7 @@ const getAllStudent = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Student are retrieved succesfully',
+    message: 'Student are retrieved successfully',
     data: result,
   });
 });
