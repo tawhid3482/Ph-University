@@ -4,6 +4,8 @@ import mongoose from 'mongoose';
 import AppError from '../../errors/AppError';
 import httpStatus from 'http-status';
 import { userModel } from '../users/user.model';
+import QueryBuilder from '../../builder/QueryBuilder';
+import { studentSearchableField } from './student.constant';
 
 // const createStudentIntoDB = async (student: TStudent) => {
 
@@ -72,14 +74,25 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
   // const paginateQuery = sortQuery.skip(skip);
   // const limitQuery = paginateQuery.limit(limit);
   // field limiting
-  let fields = '-__v';
-  if (query.fields) {
-    fields = (query.fields as string).split(',').join(' ');
-  }
+  // let fields = '-__v';
+  // if (query.fields) {
+  //   fields = (query.fields as string).split(',').join(' ');
+  // }
 
-  const fieldQuery = await limitQuery.select(fields);
+  // const fieldQuery = await limitQuery.select(fields);
 
-  return fieldQuery;
+  // return fieldQuery;
+
+  const studentQuery = new QueryBuilder(StudentModel.find(), query)
+    .search(studentSearchableField)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+    const result = await studentQuery.modelQuery;
+    return result
+     
 };
 
 const getSingleStudentFromDB = async (id: string) => {
