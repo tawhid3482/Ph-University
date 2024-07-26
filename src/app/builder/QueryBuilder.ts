@@ -9,7 +9,7 @@ class QueryBuilder<T> {
   }
 
   search(searchableField: string[]) {
-    const searchTerm = this?.query?.searchTerm
+    const searchTerm = this?.query?.searchTerm;
     if (searchTerm) {
       this.modelQuery = this.modelQuery.find({
         $or: searchableField.map(
@@ -35,18 +35,27 @@ class QueryBuilder<T> {
   }
 
   // sort
-  sort(){
-    const sort =  this?.query?.sort || '-createdAt';
-    this.modelQuery = this.modelQuery.sort(sort as string)
+  sort() {
+    const sort = this?.query?.sort || '-createdAt';
+    this.modelQuery = this.modelQuery.sort(sort as string);
     return this;
   }
 
   // paginate
-  paginate(){
-    const page = Number(this?.query?.page ) || 1;
-    const limit = Number(this?.query?.limit ) || 10;
-    const skip = (page - 1)*limit;
+  paginate() {
+    const page = Number(this?.query?.page) || 1;
+    const limit = Number(this?.query?.limit) || 10;
+    const skip = (page - 1) * limit;
     this.modelQuery = this.modelQuery.skip(skip).limit(limit);
-    return this
+    return this;
+  }
+
+  // field limiting
+  fields() {
+    const fields =
+      (this?.query?.fields as string).split(',').join(' ') || '__v';
+    this.modelQuery = this.modelQuery.select(fields);
+    return this;
   }
 }
+export default QueryBuilder;
