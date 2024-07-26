@@ -21,34 +21,34 @@ import { userModel } from '../users/user.model';
 // };
 
 const getAllStudentFromDB = async (query: Record<string, unknown>) => {
-  const queryObj = { ...query };
+  // const queryObj = { ...query };
 
-  const studentSearchableField = ['email', 'name.firstName', 'presentAddress'];
-  let searchTerm = '';
-  if (query?.searchTerm) {
-    searchTerm = query?.searchTerm as string;
-  }
+  // const studentSearchableField = ['email', 'name.firstName', 'presentAddress'];
+  // let searchTerm = '';
+  // if (query?.searchTerm) {
+  //   searchTerm = query?.searchTerm as string;
+  // }
 
-  const searchQuery = StudentModel.find({
-    $or: studentSearchableField.map((field) => ({
-      [field]: { $regex: searchTerm, $options: 'i' },
-    })),
-  });
+  // const searchQuery = StudentModel.find({
+  //   $or: studentSearchableField.map((field) => ({
+  //     [field]: { $regex: searchTerm, $options: 'i' },
+  //   })),
+  // });
 
-  // filtering
-  const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
-  excludeFields.forEach((el) => delete queryObj[el]);
+  // // filtering
+  // const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
+  // excludeFields.forEach((el) => delete queryObj[el]);
 
   // ref data ke show koranor jnno populate use kora hy
-  const filterQuery = searchQuery
-    .find(queryObj)
-    .populate('admissionSemester')
-    .populate({
-      path: 'academicDepartment',
-      populate: {
-        path: 'academicFaculty',
-      },
-    });
+  // const filterQuery = searchQuery
+  //   .find(queryObj)
+  //   .populate('admissionSemester')
+  //   .populate({
+  //     path: 'academicDepartment',
+  //     populate: {
+  //       path: 'academicFaculty',
+  //     },
+  //   });
 
   let sort = '-createdAt';
   if (query.sort) {
