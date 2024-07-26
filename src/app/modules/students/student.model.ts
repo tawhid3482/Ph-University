@@ -141,7 +141,7 @@ const studentSchema = new Schema<TStudent, TStudentModel>(
 // virtual  jkn kno kisu jog korar proyjon hobe tkn virtual use kora jay
 // akane firstName+middleName+lastName k jog kore fullName a kora hyse.
 studentSchema.virtual('fullName').get(function () {
-  return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
+  return `${this?.name?.firstName} ${this?.name?.middleName} ${this?.name?.lastName}`;
 });
 
 // query middleware
