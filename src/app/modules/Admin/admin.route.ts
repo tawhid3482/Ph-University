@@ -15,7 +15,5 @@ router.patch(
   validationRequest(updateAdminValidationSchema),
   AdminControllers.updateAdmin,
 );
-
 router.delete('/:adminId', AdminControllers.deleteAdmin);
-
 export const AdminRoutes = router;
