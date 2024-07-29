@@ -18,7 +18,7 @@ const getAllCourse = catchAsync(async(req,res)=>{
     const result  = await courseServices.getAllCourseFromDB()
 
     sendResponse(res,{
-        statusCode:httpStatus.CREATED,
+        statusCode:httpStatus.OK,
         success:true,
         message:'Course retrieved Successfully',
         data:result
@@ -29,7 +29,7 @@ const getSingleCourse = catchAsync(async(req,res)=>{
     const result  = await courseServices.getSingleCourseFromDB(id)
 
     sendResponse(res,{
-        statusCode:httpStatus.CREATED,
+        statusCode:httpStatus.OK,
         success:true,
         message:'Course retrieved Successfully',
         data:result
@@ -40,9 +40,9 @@ const deleteCourse = catchAsync(async(req,res)=>{
     const result  = await courseServices.deleteCourseFromDB(id)
 
     sendResponse(res,{
-        statusCode:httpStatus.CREATED,
+        statusCode:httpStatus.OK,
         success:true,
-        message:'Course retrieved Successfully',
+        message:'Course deleted Successfully',
         data:result
     })
 })
@@ -51,7 +51,7 @@ const updateCourse = catchAsync(async(req,res)=>{
     const result  = await courseServices.updateCourseFromDB(id,req.body)
 
     sendResponse(res,{
-        statusCode:httpStatus.CREATED,
+        statusCode:httpStatus.UPGRADE_REQUIRED,
         success:true,
         message:'Course updated Successfully',
         data:result
