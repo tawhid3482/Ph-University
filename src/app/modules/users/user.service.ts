@@ -5,7 +5,7 @@ import { TStudent } from '../students/student.interface';
 import { StudentModel } from '../students/student.model';
 import { TUser } from './user.interface';
 import { userModel } from './user.model';
-import { generatedStudentId } from './user.utils';
+import { generateAdminId, generatedStudentId, generateFacultyId } from './user.utils';
 import AppError from '../../errors/AppError';
 import httpStatus from 'http-status';
 import { TFaculty } from '../Faculty/faculty.interface';
