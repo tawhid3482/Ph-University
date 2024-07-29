@@ -13,3 +13,5 @@ route.get('/',CourseController.getAllCourse)
 route.get('/:id',CourseController.getSingleCourse)
 route.delete('/:id',CourseController.deleteCourse)
 route.patch('/:id',CourseController.updateCourse)
+
+export const CourseRoutes = route
