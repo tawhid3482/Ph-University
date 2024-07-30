@@ -51,7 +51,7 @@ const updateCourse = catchAsync(async(req,res)=>{
     const result  = await courseServices.updateCourseIntoDB(id,req.body)
 
     sendResponse(res,{
-        statusCode:httpStatus.UPGRADE_REQUIRED,
+        statusCode:httpStatus.OK,
         success:true,
         message:'Course updated Successfully',
         data:result
