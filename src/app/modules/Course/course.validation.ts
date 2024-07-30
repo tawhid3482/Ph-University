@@ -11,10 +11,15 @@ const preRequisiteCoursesValidationSchema = z.object({
         prefix:z.string(),
         code:z.number(),
         credits:z.number(),
-        preRequisiteCourses: z.array(preRequisiteCoursesValidationSchema).optional()
+        preRequisiteCourses: z.array(preRequisiteCoursesValidationSchema).optional(),
+        isDeleted: z.boolean().optional() 
+
     })
 }) 
 
+const updateCourseValidationSchema = courseValidationSchema.partial()
+
 export const CourseValidation = {
-    courseValidationSchema
+    courseValidationSchema,
+    updateCourseValidationSchema
 }

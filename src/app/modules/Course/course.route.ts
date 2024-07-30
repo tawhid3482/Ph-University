@@ -12,6 +12,6 @@ route.post('/create-course', validationRequest(CourseValidation.courseValidation
 route.get('/',CourseController.getAllCourse)
 route.get('/:id',CourseController.getSingleCourse)
 route.delete('/:id',CourseController.deleteCourse)
-route.patch('/:id',CourseController.updateCourse)
+route.patch('/:id',validationRequest(CourseValidation.updateCourseValidationSchema), CourseController.updateCourse)
 
 export const CourseRoutes = route
