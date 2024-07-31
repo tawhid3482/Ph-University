@@ -114,6 +114,10 @@ const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
   }
 };
 
+const assignFacultiesIntoDB = async (id:string, payload:)=>{
+
+}
+
 export const courseServices = {
   createCourseIntoDB,
   getAllCourseFromDB,

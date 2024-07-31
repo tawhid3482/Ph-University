@@ -14,4 +14,6 @@ route.get('/:id',CourseController.getSingleCourse)
 route.delete('/:id',CourseController.deleteCourse)
 route.patch('/:id',validationRequest(CourseValidation.updateCourseValidationSchema), CourseController.updateCourse)
 
+route.put('/:courseId/assign-faculties',)
+
 export const CourseRoutes = route
