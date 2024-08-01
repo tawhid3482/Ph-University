@@ -15,3 +15,7 @@ const createSemesterRegistration = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
+export const semesterRegistrationControllers = {
+    createSemesterRegistration,
+}
