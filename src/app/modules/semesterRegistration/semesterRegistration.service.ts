@@ -36,6 +36,12 @@ const createSemesterRegistrationIntoDB = async (
   return result;
 };
 
+const getAllSemesterRegistrationFromDB = async () => {
+  const result = await semesterRegistrationModel.find();
+  return result;
+};
+
 export const semesterRegistrationServices = {
   createSemesterRegistrationIntoDB,
+  getAllSemesterRegistrationFromDB,
 };

@@ -7,7 +7,7 @@ const route = express.Router()
 
 route.post('/create-semesterRegistration', validationRequest(semesterRegistrationValidation.semesterRegistrationValidationSchema), semesterRegistrationControllers.createSemesterRegistration)
 
-// route.get('/', semesterRegistrationControllers.getAllSemesterRegistration)
+route.get('/', semesterRegistrationControllers.getAllSemesterRegistration)
 
 
 export const semesterRegistrationRoutes = route
