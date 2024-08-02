@@ -10,6 +10,20 @@ const createSemesterRegistrationIntoDB = async (
 ) => {
   const academicSemester = payload?.academicSemester;
 
+  // check if there any registered semester that is already "upcoming"| 'ongoing
+
+  const isThereAnyUpcomingOrOngoingSemester =
+    await semesterRegistrationModel.findOne({
+      $or: [{ status: 'UPCOMING' }, { status: 'ONGOING' }],
+    });
+
+  if (isThereAnyUpcomingOrOngoingSemester) {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      `There is already an  ${isThereAnyUpcomingOrOngoingSemester.status} registered semester!`
+    );
+  }
+
   // check if the semester is exists
   const isAcademicSemesterExists = await academicSemesterModel.findById(
     academicSemester
@@ -38,11 +52,11 @@ const createSemesterRegistrationIntoDB = async (
 };
 
 const getAllSemesterRegistrationsFromDB = async (
-  query: Record<string, unknown>,
+  query: Record<string, unknown>
 ) => {
   const semesterRegistrationQuery = new QueryBuilder(
     semesterRegistrationModel.find(),
-    query,
+    query
   )
     .filter()
     .sort()
@@ -52,21 +66,22 @@ const getAllSemesterRegistrationsFromDB = async (
   const result = await semesterRegistrationQuery.modelQuery;
   return result;
 };
-const getSingleSemesterRegistrationFromDB = async(id:string)=>{
-  const result = await semesterRegistrationModel.findById(id)
-  return result
-}
+const getSingleSemesterRegistrationFromDB = async (id: string) => {
+  const result = await semesterRegistrationModel.findById(id);
+  return result;
+};
 
-const updateSemesterRegistrationIntoDB = async(id:string,payload:Partial<TSemesterRegistration>)=>{
-
-  const result = await semesterRegistrationModel.findByIdAndUpdate(id, {})
-  return result
-}
-
+const updateSemesterRegistrationIntoDB = async (
+  id: string,
+  payload: Partial<TSemesterRegistration>
+) => {
+  const result = await semesterRegistrationModel.findByIdAndUpdate(id, {});
+  return result;
+};
 
 export const semesterRegistrationServices = {
   createSemesterRegistrationIntoDB,
   getAllSemesterRegistrationsFromDB,
   getSingleSemesterRegistrationFromDB,
-  updateSemesterRegistrationIntoDB
+  updateSemesterRegistrationIntoDB,
 };
