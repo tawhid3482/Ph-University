@@ -15,7 +15,10 @@ const createSemesterRegistrationIntoDB = async (
 
   const isThereAnyUpcomingOrOngoingSemester =
     await semesterRegistrationModel.findOne({
-      $or: [{ status: RegistrationStatus.UPCOMING }, { status: RegistrationStatus.ONGOING }],
+      $or: [
+        { status: RegistrationStatus.UPCOMING },
+        { status: RegistrationStatus.ONGOING },
+      ],
     });
 
   if (isThereAnyUpcomingOrOngoingSemester) {
@@ -95,20 +98,30 @@ const updateSemesterRegistrationIntoDB = async (
   }
   const requestedStatus = payload?.status;
 
-  if (currentSemesterStatus === RegistrationStatus.UPCOMING && requestedStatus === RegistrationStatus.ENDED) {
+  if (
+    currentSemesterStatus === RegistrationStatus.UPCOMING &&
+    requestedStatus === RegistrationStatus.ENDED
+  ) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
       `You cannot directly change status from ${currentSemesterStatus} to ${requestedStatus}`
     );
   }
-  if (currentSemesterStatus === RegistrationStatus.ONGOING && requestedStatus === RegistrationStatus.UPCOMING) {
+  if (
+    currentSemesterStatus === RegistrationStatus.ONGOING &&
+    requestedStatus === RegistrationStatus.UPCOMING
+  ) {
     throw new AppError(
       httpStatus.BAD_REQUEST,
       `You cannot directly change status from ${currentSemesterStatus} to ${requestedStatus}`
     );
   }
 
-  const result = await semesterRegistrationModel.findByIdAndUpdate(id, payload ,{new: true , runValidators:true});
+  const result = await semesterRegistrationModel.findByIdAndUpdate(
+    id,
+    payload,
+    { new: true, runValidators: true }
+  );
   return result;
 };
 
