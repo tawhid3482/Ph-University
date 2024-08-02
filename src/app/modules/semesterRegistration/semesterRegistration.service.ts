@@ -75,28 +75,39 @@ const updateSemesterRegistrationIntoDB = async (
   id: string,
   payload: Partial<TSemesterRegistration>
 ) => {
+  // check if the requested register semester is exists // mane id ase kina
 
-  // check if the requested register semester is exists // mane id ase kina 
-   
-
-  const isSemesterRegistrationExists = await semesterRegistrationModel.findById(id);
+  const isSemesterRegistrationExists = await semesterRegistrationModel.findById(
+    id
+  );
   if (!isSemesterRegistrationExists) {
-    throw new AppError(
-      httpStatus.NOT_FOUND,
-      'this  Semester is not found'
-    );
+    throw new AppError(httpStatus.NOT_FOUND, 'this  Semester is not found');
   }
-
 
   // if the requested semester registration is ended, we will not update anything
-  const requestedSemesterStatus = isSemesterRegistrationExists?.status
-  if (requestedSemesterStatus === 'ENDED') {
+  const currentSemesterStatus = isSemesterRegistrationExists?.status;
+  if (currentSemesterStatus === 'ENDED') {
     throw new AppError(
       httpStatus.BAD_REQUEST,
-      `This semester is already ${requestedSemesterStatus?.status}`
+      `This semester is already ${currentSemesterStatus}`
     );
   }
-  const result = await semesterRegistrationModel.findByIdAndUpdate(id, {});
+  const requestedStatus = payload?.status;
+
+  if (currentSemesterStatus === 'UPCOMING' && requestedStatus === 'ENDED') {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      `You cannot directly change status from ${currentSemesterStatus} to ${requestedStatus}`
+    );
+  }
+  if (currentSemesterStatus === 'ONGOING' && requestedStatus === 'UPCOMING') {
+    throw new AppError(
+      httpStatus.BAD_REQUEST,
+      `You cannot directly change status from ${currentSemesterStatus} to ${requestedStatus}`
+    );
+  }
+
+  const result = await semesterRegistrationModel.findByIdAndUpdate(id, payload ,{new: true , runValidators:true});
   return result;
 };
 
