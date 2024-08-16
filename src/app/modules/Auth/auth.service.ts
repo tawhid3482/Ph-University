@@ -2,33 +2,33 @@ import httpStatus from 'http-status';
 import AppError from '../../errors/AppError';
 import { userModel } from '../users/user.model';
 import { TLoginUser } from './auth.interface';
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt';
 
 const loginUserFromClientSite = async (payload: TLoginUser) => {
   // checking if the user is exist
-  const isUserExists = await userModel.findOne({ id: payload?.id });
-  if (!isUserExists) {
+  const userData = await userModel.isUserExistsByCustomId(payload.id);
+  if (!userData) {
     throw new AppError(httpStatus.NOT_FOUND, 'this user is not found!');
   }
 
   // checking if the user is deleted
-  const isDeletedUser = await isUserExists?.isDeleted;
-  if (isDeletedUser) {
+  if (userData?.isDeleted) {
     throw new AppError(httpStatus.FORBIDDEN, 'this user is already deleted!');
   }
-  // checking if the user is block
 
-  const isBlockUser = await isUserExists?.status;
-  if (isBlockUser === 'blocked') {
+  //   // checking if the user is block
+  if (userData.status === 'blocked') {
     throw new AppError(httpStatus.FORBIDDEN, 'this user is already blocked!');
   }
 
   // checking if the password is correct
-  const isPasswordMatched = await bcrypt.compare(payload?.password, isUserExists?.password)
-console.log(isPasswordMatched)
+  if (
+    !(await userModel.isPasswordMatched(payload?.password, userData?.password))
+  ) {
+    throw new AppError(httpStatus.FORBIDDEN, 'Password do not matched!');
+  }
 
   // access granted;send accessToken, refreshToken
-
 };
 
 export const authServices = {
