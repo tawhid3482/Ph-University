@@ -1,4 +1,4 @@
-export type TUser = {
+export interface TUser  {
   id: string;
   password: string;
   needsPasswordChange: boolean;
