@@ -3,6 +3,8 @@ import AppError from '../../errors/AppError';
 import { userModel } from '../users/user.model';
 import { TLoginUser } from './auth.interface';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import config from '../../config';
 
 const loginUserFromClientSite = async (payload: TLoginUser) => {
   // checking if the user is exist
@@ -29,6 +31,20 @@ const loginUserFromClientSite = async (payload: TLoginUser) => {
   }
 
   // access granted;send accessToken, refreshToken
+  // create token and sent to the client
+  const jwtPayload = {
+    userId: userData,
+    role: userData.role,
+  };
+
+  const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret, {
+    expiresIn: 60 * 60,
+  });
+
+  return {
+    accessToken,
+    needsPasswordChange: userData?.needsPasswordChange,
+  };
 };
 
 export const authServices = {
