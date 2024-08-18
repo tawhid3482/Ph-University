@@ -37,7 +37,7 @@ const loginUserFromClientSite = async (payload: TLoginUser) => {
     role: userData.role,
   };
 
-  const accessToken = jwt.sign(jwtPayload,config.jwt_access_secret as string, {
+  const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
     expiresIn: 60 * 60,
   });
 
@@ -47,6 +47,14 @@ const loginUserFromClientSite = async (payload: TLoginUser) => {
   };
 };
 
+const changePasswordIntoDb = async (
+  user: { userId: string; role: string },
+  payload
+) => {
+  const result = await userModel.findOneAndUpdate({id:user?.userId, role:user?.role}, )
+};
+
 export const authServices = {
   loginUserFromClientSite,
+  changePasswordIntoDb,
 };
