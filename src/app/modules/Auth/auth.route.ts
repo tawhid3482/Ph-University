@@ -12,7 +12,7 @@ router.post(
 );
 router.post(
   '/change-password',
-  validationRequest(AuthValidation.loginValidationSchema),
+  validationRequest(AuthValidation.changePasswordValidationSchema),
   AuthControllers.loginUser
 );
 
