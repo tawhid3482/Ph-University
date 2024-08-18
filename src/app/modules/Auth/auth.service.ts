@@ -33,11 +33,11 @@ const loginUserFromClientSite = async (payload: TLoginUser) => {
   // access granted;send accessToken, refreshToken
   // create token and sent to the client
   const jwtPayload = {
-    userId: userData,
+    userId: userData?.id,
     role: userData.role,
   };
 
-  const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret, {
+  const accessToken = jwt.sign(jwtPayload,config.jwt_access_secret as string, {
     expiresIn: 60 * 60,
   });
 
