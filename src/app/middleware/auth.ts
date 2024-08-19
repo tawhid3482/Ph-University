@@ -6,7 +6,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../config';
 import { TUserRole } from '../modules/users/user.interface';
 
-const auth = (...requiredRoles :TUserRole[]) => {
+const auth = (...requiredRoles: TUserRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     // auth token validation check
     const token = req.headers.authorization;
@@ -16,28 +16,17 @@ const auth = (...requiredRoles :TUserRole[]) => {
     }
 
     // check if the token is valid
-    jwt.verify(
-      token,
-      config.jwt_access_secret as string,
-      function (err, decoded) {
-        if (err) {
-          throw new AppError(
-            httpStatus.UNAUTHORIZED,
-            'You are not authorized!'
-          );
-        }
-        const role = (decoded as JwtPayload).role
-        if(requiredRoles && !requiredRoles.includes(role)){
-          throw new AppError(
-            httpStatus.UNAUTHORIZED,
-            'You are not authorized!'
-          );
-        }
+    const decoded = jwt.verify(token, config.jwt_access_secret as string) as JwtPayload;
+    const role = decoded.role;
+    if (requiredRoles && !requiredRoles.includes(role)) {
+      throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized!');
+    }
 
-        req.user = decoded as JwtPayload;
-        next();
-      }
-    );
+    
+
+
+    req.user = decoded as JwtPayload;
+    next();
   });
 };
 
