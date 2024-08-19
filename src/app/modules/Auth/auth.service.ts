@@ -106,7 +106,48 @@ const changePasswordIntoDb = async (
   return null;
 };
 
+const refreshTokenFrom = async (token: string) => {
+  // // check if the token is sent from the client
+  // if (!token) {
+  //   throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized!');
+  // }
+
+  // check if the token is valid
+  const decoded = jwt.verify(
+    token,
+    config.jwt_refresh_secret as string
+  ) as JwtPayload;
+
+  const { userId, role, iat } = decoded;
+
+  // check the user is exist
+  const userData = await userModel.isUserExistsByCustomId(userId);
+  if (!userData) {
+    throw new AppError(httpStatus.NOT_FOUND, 'this user is not found!');
+  }
+
+  // checking if the user is deleted
+  if (userData?.isDeleted) {
+    throw new AppError(httpStatus.FORBIDDEN, 'this user is already deleted!');
+  }
+
+  //   // checking if the user is block
+  if (userData.status === 'blocked') {
+    throw new AppError(httpStatus.FORBIDDEN, 'this user is already blocked!');
+  }
+  if (
+    userData.passwordChangeAt &&
+    userModel.isJWTIssuedBeforePasswordChanged(
+      userData.passwordChangeAt,
+      iat as number
+    )
+  ) {
+    throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized!');
+  }
+};
+
 export const authServices = {
   loginUserFromClientSite,
   changePasswordIntoDb,
+  refreshTokenFrom,
 };
