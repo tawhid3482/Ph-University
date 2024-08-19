@@ -82,16 +82,18 @@ const changePasswordIntoDb = async (
     Number(config.bcrypt_salt_rounds)
   );
 
-await userModel.findOneAndUpdate(
+  await userModel.findOneAndUpdate(
     {
       id: user?.userId,
       role: user?.role,
     },
     {
       password: newHashPassword,
+      needsPasswordChange: false,
+      passwordChangeAt:new Date()
     }
   );
-  return null
+  return null;
 };
 
 export const authServices = {
