@@ -41,6 +41,10 @@ const loginUserFromClientSite = async (payload: TLoginUser) => {
     expiresIn: 60 * 60,
   });
 
+  const refreshToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
+    expiresIn: 60 * 60,
+  });
+
   return {
     accessToken,
     needsPasswordChange: userData?.needsPasswordChange,
@@ -90,7 +94,7 @@ const changePasswordIntoDb = async (
     {
       password: newHashPassword,
       needsPasswordChange: false,
-      passwordChangeAt:new Date()
+      passwordChangeAt: new Date(),
     }
   );
   return null;
