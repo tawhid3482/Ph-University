@@ -6,9 +6,9 @@ import config from '../../config';
 const userSchema = new Schema<TUser, UserModel>(
   {
     id: { type: String, unique: true, required: true },
-    password: { type: String,  required:true, select:0},
+    password: { type: String, required: true, select: 0 },
     needsPasswordChange: { type: Boolean, default: true },
-    passwordChangeAt:{type: Date},
+    passwordChangeAt: { type: Date },
     role: {
       type: String,
       enum: {
@@ -48,17 +48,28 @@ userSchema.post('save', function (doc, next) {
     next();
 });
 
-// checking 
-userSchema.statics.isUserExistsByCustomId = async function (id: string){
-  return await userModel.findOne({ id }).select("+password");
+// checking
+userSchema.statics.isUserExistsByCustomId = async function (id: string) {
+  return await userModel.findOne({ id }).select('+password');
 };
 
 // userSchema.statics.isUserExistsByCustomId = async function (id: string){
 //   return await bcrypt.compare(payload?.password, isUserExists?.password)
 // };
 
-userSchema.statics.isPasswordMatched = async function (plainTextPassword, hashedPassword){
-  return await bcrypt.compare(plainTextPassword, hashedPassword)
+userSchema.statics.isPasswordMatched = async function (
+  plainTextPassword,
+  hashedPassword
+) {
+  return await bcrypt.compare(plainTextPassword, hashedPassword);
+};
+
+userSchema.statics.isJWTIssuedBeforePasswordChanged = function (
+  passwordChangedTimestamp: Date,
+  jwtIssuedTimestamp: number
+) {
+  const passwordChangedTime = new Date(passwordChangedTimestamp).getTime() /1000;
+  return passwordChangedTime > jwtIssuedTimestamp;
 };
 
 export const userModel = model<TUser, UserModel>('user', userSchema);
