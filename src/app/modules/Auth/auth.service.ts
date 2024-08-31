@@ -160,8 +160,43 @@ const refreshTokenFrom = async (token: string) => {
   return { accessToken };
 };
 
+const forgetPasswordIntoDB = async (userId: string) => {
+  // check the user is exist
+  const userData = await userModel.isUserExistsByCustomId(userId);
+  if (!userData) {
+    throw new AppError(httpStatus.NOT_FOUND, 'this user is not found!');
+  }
+
+  // checking if the user is deleted
+  if (userData?.isDeleted) {
+    throw new AppError(httpStatus.FORBIDDEN, 'this user is already deleted!');
+  }
+
+  //   // checking if the user is block
+  if (userData.status === 'blocked') {
+    throw new AppError(httpStatus.FORBIDDEN, 'this user is already blocked!');
+  }
+
+  // create token and sent to the client
+  const jwtPayload = {
+    userId: userData?.id,
+    role: userData.role,
+  };
+
+  const resetToken = createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    '10m'
+  );
+
+  const resetUILInk = `http://localhost:3000?id=${userData?.id}&token=${resetToken}`;
+  console.log(resetUILInk);
+  
+};
+
 export const authServices = {
   loginUserFromClientSite,
   changePasswordIntoDb,
   refreshTokenFrom,
+  forgetPasswordIntoDB,
 };
