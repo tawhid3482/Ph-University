@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../../config';
 import { createToken } from './auth.utils';
+import { sendEmail } from '../../utils/sendEmail';
 
 const loginUserFromClientSite = async (payload: TLoginUser) => {
   // checking if the user is exist
@@ -189,8 +190,29 @@ const forgetPasswordIntoDB = async (userId: string) => {
     '10m'
   );
 
-  const resetUILInk = `http://localhost:3000?id=${userData?.id}&token=${resetToken}`;
-  console.log(resetUILInk);
+  const resetUILInk = `${config.reset_pass_url_link}?id=${userData?.id}&token=${resetToken}`;
+  sendEmail(userData?.email,resetUILInk);
+  console.log(resetUILInk)
+};
+
+const resetPasswordIntoDB = async (payload:{id:string,newPassword:string}, token) => {
+  // check the user is exist
+  const userData = await userModel.isUserExistsByCustomId(payload?.id);
+  if (!userData) {
+    throw new AppError(httpStatus.NOT_FOUND, 'this user is not found!');
+  }
+
+  // checking if the user is deleted
+  if (userData?.isDeleted) {
+    throw new AppError(httpStatus.FORBIDDEN, 'this user is already deleted!');
+  }
+
+  //   // checking if the user is block
+  if (userData.status === 'blocked') {
+    throw new AppError(httpStatus.FORBIDDEN, 'this user is already blocked!');
+  }
+  
+
   
 };
 
@@ -199,4 +221,5 @@ export const authServices = {
   changePasswordIntoDb,
   refreshTokenFrom,
   forgetPasswordIntoDB,
+  resetPasswordIntoDB
 };
