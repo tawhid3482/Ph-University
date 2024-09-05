@@ -2,6 +2,7 @@ import { UserServices } from './user.service';
 import sendResponse from '../../utils/sendResponse';
 import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
+import AppError from '../../errors/AppError';
 
 const createStudent = catchAsync(async (req, res) => {
   const { password, student: studentData } = req.body;
@@ -40,8 +41,32 @@ const createAdmin = catchAsync(async (req, res) => {
 });
 
 
+const getMe = catchAsync(async (req, res) => {
+  const {userId ,role}= req.user
+  const result = await UserServices.getMeIntoDB(userId,role);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User retrieved successfully',
+    data: result,
+  });
+});
+const changeStatus = catchAsync(async (req, res) => {
+  const id= req.params.id
+  const result = await UserServices.changeStatusIntoDB(id,req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Status is updated successfully',
+    data: result,
+  });
+});
+
+
 export const UserControllers = {
   createStudent,
   createFaculty,
-  createAdmin
+  createAdmin,
+  getMe,
+  changeStatus
 };

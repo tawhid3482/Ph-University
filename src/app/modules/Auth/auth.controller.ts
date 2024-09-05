@@ -37,44 +37,42 @@ const changePassword = catchAsync(async (req, res) => {
 });
 
 const refreshToken = catchAsync(async (req, res) => {
-    const {refreshToken}= req.cookies
-    const result = await authServices.refreshTokenFrom(refreshToken);
-    
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: 'Access token is retrieved successfully',
-      data: result
-    });
+  const { refreshToken } = req.cookies;
+  const result = await authServices.refreshTokenFrom(refreshToken);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Access token is retrieved successfully',
+    data: result,
   });
+});
 
-  const forgetPassword = catchAsync(async(req,res)=>{
-    const {id:userId} = req.body
-    const result = await authServices.forgetPasswordIntoDB(userId)
-    sendResponse(res,{
-      statusCode:httpStatus.OK,
-      success:true,
-      message:'Reset link is generated successfully',
-      data:result
-    })
-  })
-  const resetPassword = catchAsync(async(req,res)=>{
-    const token = req.headers.authorization
-    const result = await authServices.resetPasswordIntoDB(req.body,token)
-    sendResponse(res,{
-      statusCode:httpStatus.OK,
-      success:true,
-      message:'Password Reset successfully',
-      data:result
-    })
-  })
-  
-
+const forgetPassword = catchAsync(async (req, res) => {
+  const { id: userId } = req.body;
+  const result = await authServices.forgetPasswordIntoDB(userId);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Reset link is generated successfully',
+    data: result,
+  });
+});
+const resetPassword = catchAsync(async (req, res) => {
+  const token = req.headers.authorization;
+  const result = await authServices.resetPasswordIntoDB(req.body, token);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Password Reset successfully',
+    data: result,
+  });
+});
 
 export const AuthControllers = {
   loginUser,
   refreshToken,
   changePassword,
   forgetPassword,
-  resetPassword
+  resetPassword,
 };

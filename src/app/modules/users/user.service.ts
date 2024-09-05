@@ -16,6 +16,7 @@ import { TFaculty } from '../Faculty/faculty.interface';
 import { academicDepartmentModel } from '../academicDepartment/academicDepartment.model';
 import { Faculty } from '../Faculty/faculty.model';
 import { Admin } from '../Admin/admin.model';
+import { sendImageToCloudinary } from '../../utils/sendImageToCloudinary';
 
 const createStudentIntoDB = async (password: string, payload: TStudent) => {
   // create user object
@@ -40,7 +41,8 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
     userData.id = await generatedStudentId(admissionSemester);
     // now we have no auto genetated id so we use manually generated password
     // userData.id = '2025010001';
-
+    // clouding code
+    sendImageToCloudinary();
     // create a new user(transaction-1)
     const newUser = await userModel.create([userData], { session });
 
@@ -54,7 +56,6 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
 
     //create a student {transaction-2}
     const newStudent = await StudentModel.create([payload], { session });
-
     if (!newStudent.length) {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create student');
     }
@@ -172,8 +173,32 @@ const createAdminIntoDB = async (password: string, payload: TFaculty) => {
   }
 };
 
+const getMeIntoDB = async (userId: string, role: string) => {
+  let result = null;
+  if (role === 'student') {
+    result = await StudentModel.findOne({ id: userId });
+  }
+  if (role === 'admin') {
+    result = await Admin.findOne({ id: userId });
+  }
+  if (role === 'faculty') {
+    result = await Faculty.findOne({ id: userId });
+  }
+
+  return result;
+};
+
+const changeStatusIntoDB = async (id: string, payload: { status: string }) => {
+  const result = await userModel.findByIdAndUpdate(id, payload, {
+    new: true,
+  });
+  return result;
+};
+
 export const UserServices = {
   createStudentIntoDB,
   createFacultyIntoDB,
   createAdminIntoDB,
+  getMeIntoDB,
+  changeStatusIntoDB,
 };

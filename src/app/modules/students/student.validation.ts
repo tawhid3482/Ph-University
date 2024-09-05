@@ -107,7 +107,8 @@ export const updateStudentValidationSchema = z.object({
   }),
 });
 
+
 export const StudentValidationSchema = {
    createStudentValidationSchema,
-   updateStudentValidationSchema
+   updateStudentValidationSchema,
 };

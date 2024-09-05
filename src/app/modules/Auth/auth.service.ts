@@ -191,11 +191,14 @@ const forgetPasswordIntoDB = async (userId: string) => {
   );
 
   const resetUILInk = `${config.reset_pass_url_link}?id=${userData?.id}&token=${resetToken}`;
-  sendEmail(userData?.email,resetUILInk);
-  console.log(resetUILInk)
+  sendEmail(userData?.email, resetUILInk);
+  console.log(resetUILInk);
 };
 
-const resetPasswordIntoDB = async (payload:{id:string,newPassword:string}, token) => {
+const resetPasswordIntoDB = async (
+  payload: { id: string; newPassword: string },
+  token: string
+) => {
   // check the user is exist
   const userData = await userModel.isUserExistsByCustomId(payload?.id);
   if (!userData) {
@@ -211,9 +214,34 @@ const resetPasswordIntoDB = async (payload:{id:string,newPassword:string}, token
   if (userData.status === 'blocked') {
     throw new AppError(httpStatus.FORBIDDEN, 'this user is already blocked!');
   }
-  
 
-  
+  // check if the token is valid
+  const decoded = jwt.verify(
+    token,
+    config.jwt_access_secret as string
+  ) as JwtPayload;
+
+  // id verify
+  if (payload.id !== decoded.userId) {
+    throw new AppError(httpStatus.FORBIDDEN, 'You are forbidden');
+  }
+
+  // hash the new password
+  const newHashPassword = await bcrypt.hash(
+    payload?.newPassword,
+    Number(config.bcrypt_salt_rounds)
+  );
+  await userModel.findOneAndUpdate(
+    {
+      id: decoded?.userId,
+      role: decoded?.role,
+    },
+    {
+      password: newHashPassword,
+      needsPasswordChange: false,
+      passwordChangeAt: new Date(),
+    }
+  );
 };
 
 export const authServices = {
@@ -221,5 +249,5 @@ export const authServices = {
   changePasswordIntoDb,
   refreshTokenFrom,
   forgetPasswordIntoDB,
-  resetPasswordIntoDB
+  resetPasswordIntoDB,
 };
