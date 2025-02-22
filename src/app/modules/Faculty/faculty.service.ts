@@ -2,16 +2,15 @@
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import QueryBuilder from '../../builder/QueryBuilder';
-import { Faculty } from './faculty.model';
+import AppError from '../../errors/AppError';
+import { User } from '../User/user.model';
 import { FacultySearchableFields } from './faculty.constant';
 import { TFaculty } from './faculty.interface';
-import AppError from '../../errors/AppError';
-import { userModel } from '../users/user.model';
-
+import { Faculty } from './faculty.model';
 
 const getAllFacultiesFromDB = async (query: Record<string, unknown>) => {
   const facultyQuery = new QueryBuilder(
-    Faculty.find(),
+    Faculty.find().populate('academicDepartment academicFaculty'),
     query,
   )
     .search(FacultySearchableFields)
@@ -21,12 +20,17 @@ const getAllFacultiesFromDB = async (query: Record<string, unknown>) => {
     .fields();
 
   const result = await facultyQuery.modelQuery;
-  return result;
+  const meta = await facultyQuery.countTotal();
+  return {
+    result,
+    meta,
+  };
 };
 
-
 const getSingleFacultyFromDB = async (id: string) => {
-  const result = await Faculty.findById(id).populate('academicDepartment');
+  const result = await Faculty.findById(id).populate(
+    'academicDepartment academicFaculty',
+  );
 
   return result;
 };
@@ -70,7 +74,7 @@ const deleteFacultyFromDB = async (id: string) => {
     // get user _id from deletedFaculty
     const userId = deletedFaculty.user;
 
-    const deletedUser = await userModel.findByIdAndUpdate(
+    const deletedUser = await User.findByIdAndUpdate(
       userId,
       { isDeleted: true },
       { new: true, session },

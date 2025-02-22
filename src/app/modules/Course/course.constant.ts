@@ -1,1 +1,1 @@
-export const CourseSearchableField = ['title','prefix', 'code']
+export const CourseSearchableFields = ['title', 'prefix'];

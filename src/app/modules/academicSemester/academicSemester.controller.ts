@@ -2,38 +2,44 @@ import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { AcademicSemesterServices } from './academicSemester.service';
-import { academicSemesterModel } from './academicSemester.model';
 
 const createAcademicSemester = catchAsync(async (req, res) => {
   const result = await AcademicSemesterServices.createAcademicSemesterIntoDB(
-    req.body
+    req.body,
   );
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Academic Semester create successfully',
+    message: 'Academic semester is created succesfully',
     data: result,
   });
 });
 
-const getAllAcademicSemester = catchAsync(async (req, res) => {
-  const result = await AcademicSemesterServices.getAllAcademicSemesterFromDB();
+const getAllAcademicSemesters = catchAsync(async (req, res) => {
+  const result = await AcademicSemesterServices.getAllAcademicSemestersFromDB(
+    req.query,
+  );
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Academic Semester are retrieved succesfully',
-    data: result,
+    message: 'Academic semesters are retrieved successfully',
+    meta: result.meta,
+    data: result.result,
   });
 });
+
 const getSingleAcademicSemester = catchAsync(async (req, res) => {
-  const { _id } = req.params;
-  const result = await AcademicSemesterServices.getSingleAcademicSemesterFromDB(
-    _id
-  );
+  const { semesterId } = req.params;
+
+  const result =
+    await AcademicSemesterServices.getSingleAcademicSemesterFromDB(semesterId);
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Academic Semester are retrieved succesfully',
+    message: 'Academic semester is retrieved succesfully',
     data: result,
   });
 });
@@ -55,7 +61,7 @@ const updateAcademicSemester = catchAsync(async (req, res) => {
 
 export const AcademicSemesterControllers = {
   createAcademicSemester,
-  getAllAcademicSemester,
+  getAllAcademicSemesters,
   getSingleAcademicSemester,
   updateAcademicSemester,
 };

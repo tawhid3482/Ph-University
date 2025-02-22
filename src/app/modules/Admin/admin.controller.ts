@@ -1,4 +1,3 @@
-
 import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
@@ -11,7 +10,7 @@ const getSingleAdmin = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Admin is retrieved successfully',
+    message: 'Admin is retrieved succesfully',
     data: result,
   });
 });
@@ -22,8 +21,9 @@ const getAllAdmins = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Admins are retrieved successfully',
-    data: result,
+    message: 'Admins are retrieved succesfully',
+    meta: result.meta,
+    data: result.result,
   });
 });
 
@@ -35,7 +35,7 @@ const updateAdmin = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Admin is updated successfully',
+    message: 'Admin is updated succesfully',
     data: result,
   });
 });
@@ -47,7 +47,7 @@ const deleteAdmin = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Admin is deleted successfully',
+    message: 'Admin is deleted succesfully',
     data: result,
   });
 });

@@ -2,12 +2,11 @@
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import QueryBuilder from '../../builder/QueryBuilder';
-import { Admin } from './admin.model';
+import AppError from '../../errors/AppError';
+import { User } from '../User/user.model';
 import { AdminSearchableFields } from './admin.constant';
 import { TAdmin } from './admin.interface';
-import AppError from '../../errors/AppError';
-import { userModel } from '../users/user.model';
-
+import { Admin } from './admin.model';
 
 const getAllAdminsFromDB = async (query: Record<string, unknown>) => {
   const adminQuery = new QueryBuilder(Admin.find(), query)
@@ -18,7 +17,11 @@ const getAllAdminsFromDB = async (query: Record<string, unknown>) => {
     .fields();
 
   const result = await adminQuery.modelQuery;
-  return result;
+  const meta = await adminQuery.countTotal();
+  return {
+    result,
+    meta,
+  };
 };
 
 const getSingleAdminFromDB = async (id: string) => {
@@ -65,7 +68,7 @@ const deleteAdminFromDB = async (id: string) => {
     // get user _id from deletedAdmin
     const userId = deletedAdmin.user;
 
-    const deletedUser = await userModel.findOneAndUpdate(
+    const deletedUser = await User.findOneAndUpdate(
       userId,
       { isDeleted: true },
       { new: true, session },

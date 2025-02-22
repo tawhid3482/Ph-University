@@ -1,29 +1,56 @@
 import express from 'express';
-import validationRequest from '../../middleware/validateRequest';
-import { semesterRegistrationControllers } from './semesterRegistration.controller';
+import auth from '../../middlewares/auth';
+import validateRequest from '../../middlewares/validateRequest';
+import { USER_ROLE } from '../User/user.constant';
+import { SemesterRegistrationController } from './semesterRegistration.controller';
 import { SemesterRegistrationValidations } from './semesterRegistration.validation';
 
-const route = express.Router();
+const router = express.Router();
 
-route.post(
-  '/create-semesterRegistration',
-  validationRequest(
-    SemesterRegistrationValidations.createSemesterRegistrationValidationSchema
+router.post(
+  '/create-semester-registration',
+  auth(USER_ROLE.superAdmin, USER_ROLE.admin),
+  validateRequest(
+    SemesterRegistrationValidations.createSemesterRegistrationValidationSchema,
   ),
-  semesterRegistrationControllers.createSemesterRegistration
+  SemesterRegistrationController.createSemesterRegistration,
 );
 
-route.get('/', semesterRegistrationControllers.getAllSemesterRegistrations);
-route.get(
+router.get(
   '/:id',
-  semesterRegistrationControllers.getSingleSemesterRegistration
-);
-route.patch(
-  '/:id',
-  validationRequest(
-    SemesterRegistrationValidations.updateSemesterRegistrationValidationSchema
+  auth(
+    USER_ROLE.superAdmin,
+    USER_ROLE.admin,
+    USER_ROLE.faculty,
+    USER_ROLE.student,
   ),
-  semesterRegistrationControllers.updateSemesterRegistration
+  SemesterRegistrationController.getSingleSemesterRegistration,
 );
 
-export const semesterRegistrationRoutes = route;
+router.patch(
+  '/:id',
+  auth(USER_ROLE.superAdmin, USER_ROLE.admin),
+  validateRequest(
+    SemesterRegistrationValidations.upadateSemesterRegistrationValidationSchema,
+  ),
+  SemesterRegistrationController.updateSemesterRegistration,
+);
+
+router.delete(
+  '/:id',
+  auth(USER_ROLE.superAdmin, USER_ROLE.admin),
+  SemesterRegistrationController.deleteSemesterRegistration,
+);
+
+router.get(
+  '/',
+  auth(
+    USER_ROLE.superAdmin,
+    USER_ROLE.admin,
+    USER_ROLE.faculty,
+    USER_ROLE.student,
+  ),
+  SemesterRegistrationController.getAllSemesterRegistrations,
+);
+
+export const semesterRegistrationRoutes = router;

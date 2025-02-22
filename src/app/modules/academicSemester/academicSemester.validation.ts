@@ -1,27 +1,31 @@
-import { string, z } from 'zod';
-import { MonthSchema, semesterCodeSchema, semesterNameSchema } from './academicSemester.constant';
+import { z } from 'zod';
+import {
+  AcademicSemesterCode,
+  AcademicSemesterName,
+  Months,
+} from './academicSemester.constant';
 
-export const createAcademicSemesterValidationSchema = z.object({
+const createAcdemicSemesterValidationSchema = z.object({
   body: z.object({
-    name: z.enum([...semesterNameSchema] as [string, ...string[]]),
-    code: z.enum([...semesterCodeSchema] as [string, ...string[]]),
+    name: z.enum([...AcademicSemesterName] as [string, ...string[]]),
     year: z.string(),
-    startMonth: z.enum([...MonthSchema] as [string, ...string[]]),
-    endMonth: z.enum([...MonthSchema] as [string, ...string[]]),
+    code: z.enum([...AcademicSemesterCode] as [string, ...string[]]),
+    startMonth: z.enum([...Months] as [string, ...string[]]),
+    endMonth: z.enum([...Months] as [string, ...string[]]),
   }),
 });
 
 const updateAcademicSemesterValidationSchema = z.object({
   body: z.object({
-    name: z.enum([...semesterNameSchema] as [string, ...string[]]).optional(),
+    name: z.enum([...AcademicSemesterName] as [string, ...string[]]).optional(),
     year: z.string().optional(),
-    code: z.enum([...semesterCodeSchema] as [string, ...string[]]).optional(),
-    startMonth: z.enum([...MonthSchema] as [string, ...string[]]).optional(),
-    endMonth: z.enum([...MonthSchema] as [string, ...string[]]).optional(),
+    code: z.enum([...AcademicSemesterCode] as [string, ...string[]]).optional(),
+    startMonth: z.enum([...Months] as [string, ...string[]]).optional(),
+    endMonth: z.enum([...Months] as [string, ...string[]]).optional(),
   }),
 });
 
-export const academicSemesterValidation = {
-  createAcademicSemesterValidationSchema,
-  updateAcademicSemesterValidationSchema
+export const AcademicSemesterValidations = {
+  createAcdemicSemesterValidationSchema,
+  updateAcademicSemesterValidationSchema,
 };

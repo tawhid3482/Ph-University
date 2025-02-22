@@ -1,34 +1,50 @@
+import QueryBuilder from '../../builder/QueryBuilder';
+import { AcademicFacultySearchableFields } from './academicFaculty.constant';
 import { TAcademicFaculty } from './academicFaculty.interface';
-import { academicFacultyModel } from './academicFaculty.model';
+import { AcademicFaculty } from './academicFaculty.model';
 
 const createAcademicFacultyIntoDB = async (payload: TAcademicFaculty) => {
-  const result = await academicFacultyModel.create(payload);
-  return result;
-};
-const getAllAcademicFacultyFromDB = async () => {
-  const result = await academicFacultyModel.find();
-  return result;
-};
-const getSingleAcademicFacultyFromDB = async (id: string) => {
-  const result = await academicFacultyModel.findById({ _id: id });
+  const result = await AcademicFaculty.create(payload);
   return result;
 };
 
-const updateAcademicFacultyFromDB = async (
-  id: string,
-  payload: Partial<TAcademicFaculty>
+const getAllAcademicFacultiesFromDB = async (
+  query: Record<string, unknown>,
 ) => {
-  const result = await academicFacultyModel.findOneAndUpdate(
-    { _id: id },
-    payload,
-    { new: true }
-  );
+  const academicFacultyQuery = new QueryBuilder(AcademicFaculty.find(), query)
+    .search(AcademicFacultySearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await academicFacultyQuery.modelQuery;
+  const meta = await academicFacultyQuery.countTotal();
+
+  return {
+    meta,
+    result,
+  };
+};
+
+const getSingleAcademicFacultyFromDB = async (id: string) => {
+  const result = await AcademicFaculty.findById(id);
+  return result;
+};
+
+const updateAcademicFacultyIntoDB = async (
+  id: string,
+  payload: Partial<TAcademicFaculty>,
+) => {
+  const result = await AcademicFaculty.findOneAndUpdate({ _id: id }, payload, {
+    new: true,
+  });
   return result;
 };
 
 export const AcademicFacultyServices = {
   createAcademicFacultyIntoDB,
-  getAllAcademicFacultyFromDB,
+  getAllAcademicFacultiesFromDB,
   getSingleAcademicFacultyFromDB,
-  updateAcademicFacultyFromDB,
+  updateAcademicFacultyIntoDB,
 };

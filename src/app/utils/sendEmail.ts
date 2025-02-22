@@ -1,23 +1,23 @@
 import nodemailer from 'nodemailer';
 import config from '../config';
-export const sendEmail = async (to:string, html:string) => {
+
+export const sendEmail = async (to: string, html: string) => {
   const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com', // smtp host for gmail
-     port: 587, //smtp port for gmail
-    secure: config.NODE_ENV === 'production', // Use `true` for port 465, `false` for all other ports
+    host: 'smtp.gmail.com.',
+    port: 587,
+    secure: config.NODE_ENV === 'production',
     auth: {
-      user: 'tawhidulislam3482@gmail.com',
-      pass: 'rphx petr gxaq hzgi', // app password
+      // TODO: replace `user` and `pass` values from <https://forwardemail.net>
+      user: 'mezbaul@programming-hero.com',
+      pass: 'xfqj dshz wdui ymtb',
     },
   });
 
-  // send mail with defined transport object
-
   await transporter.sendMail({
-    from: 'tawhidulislam3482@gmail.com', // sender address
-    to , // list of receivers
-    subject: 'Reset Your Password within 10 minutes', // Subject line
+    from: 'mezbaul@programming-hero.com', // sender address
+    to, // list of receivers
+    subject: 'Reset your password within ten mins!', // Subject line
     text: '', // plain text body
-    html // html body
+    html, // html body
   });
 };
